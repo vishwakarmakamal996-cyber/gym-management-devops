@@ -86,13 +86,13 @@ th, td { border: 1px solid #d5dee7; padding: 2mm; vertical-align: top; }
   <h3>1. Jira</h3>
   <p>Jira is a project and issue-tracking tool used to plan work, assign tasks, and monitor progress. For this project, suitable tasks include API implementation, testing, containerization, security scanning, and deployment automation. A real Jira board requires a signed-in account and project workspace.</p>
   <h3>2. Git and GitHub</h3>
-  <p>Git records source changes as version history. GitHub hosts Git repositories and supports collaboration and pull requests. The project contains a GitHub Actions workflow definition; uploading it and obtaining a hosted Actions run requires a GitHub repository and account access.</p>
+  <p>Git records source changes as version history. GitHub hosts Git repositories and supports collaboration and pull requests. The project was pushed to the <code>gym-management-devops</code> GitHub repository, which contains the API, tests, Docker files, and CI workflow.</p>
   <h3>3. Jenkins</h3>
   <p>Jenkins is an automation server that runs a pipeline defined in a <code>Jenkinsfile</code>. The supplied pipeline checks out source, installs dependencies, runs pytest, builds the image, scans it, and deploys with Docker Compose. A working Jenkins server and configured Linux agent are required to run it.</p>
   <h3>4. pytest</h3>
   <p>pytest is a Python test framework. Automated tests exercise the health endpoint, successful member creation, list operations, invalid input, duplicate email rejection, and unknown-member handling.</p>
   <h3>5. GitHub Actions</h3>
-  <p>GitHub Actions runs workflow jobs from YAML files stored in <code>.github/workflows</code>. The included workflow is set to run for pushes and pull requests to <code>main</code>, then test, build, scan, deploy on its runner, and verify service health. A hosted run has not been claimed unless the workflow is uploaded and executed in GitHub.</p>
+  <p>GitHub Actions runs workflow jobs from YAML files stored in <code>.github/workflows</code>. The workflow ran successfully on a push to <code>main</code>: it installed dependencies, passed all tests, built the image, completed both Trivy scans, deployed with Ansible on its Ubuntu runner, and verified the health endpoint.</p>
   <div class="footer">Assignment 1 · Theory</div>
 </section>
 
@@ -161,7 +161,7 @@ docker run --rm -v "${projectPath}:/src" aquasec/trivy:0.75.0 fs `
   --severity CRITICAL,HIGH --ignore-unfixed /src/requirements.txt</pre>
   <p><b>Observed result:</b> no vulnerabilities were detected in the declared application dependency file at scan time.</p>
   <h3>Step 8: CI and deployment configuration</h3>
-  <p>A Jenkinsfile and GitHub Actions workflow were added with test, build, security-scan, and deployment stages. A local Ansible playbook invokes Docker Compose. These configuration files are prepared; hosted Jenkins/GitHub runs, Jira board setup, Docker Hub publishing, and Ansible execution are not represented as completed because they require separate accounts or a supported host setup.</p>
+  <p>The Jira project was created with five tasks, and the GitHub repository and workflow were executed. The successful GitHub Actions run completed test, build, both security scans, Ansible deployment, and health verification. A Jenkinsfile and local Ansible playbook are also included; Jenkins was not separately configured, and the image was not published to Docker Hub.</p>
   <div class="footer">Assignment 1 · Practical steps and outputs</div>
 </section>
 
@@ -173,9 +173,9 @@ docker run --rm -v "${projectPath}:/src" aquasec/trivy:0.75.0 fs `
   <div class="evidence"><b>Evidence 2 — Running Docker container and API health</b>Insert Docker Compose status and the browser or terminal response from <code>http://localhost:8088/health</code>.</div>
   <div class="evidence"><b>Evidence 3 — Trivy operating-system scan</b>Insert the clean OS-package scan summary.</div>
   <div class="evidence"><b>Evidence 4 — Trivy dependency scan</b>Insert the clean <code>requirements.txt</code> scan summary.</div>
-  <div class="evidence"><b>Evidence 5 — Optional account-based services</b>After you set them up, insert the Jira board and a successful GitHub Actions or Jenkins pipeline run. These external services have not been run for this practical.</div>
+  <div class="evidence"><b>Evidence 5 — GitHub Actions workflow</b>Insert a screenshot of the successful run showing the completed CI stages.</div>
   <h3>Conclusion</h3>
-  <p>A Gym Management API was implemented, tested, containerized, and run locally. The 7 automated tests passed, the Docker container reached healthy status, and the OS-package and declared-dependency scans reported no high or critical findings at scan time. CI and deployment definitions provide a repeatable next step for GitHub Actions or Jenkins. Persistent database storage, production hosting, and account-based integrations remain outside this local demonstration.</p>
+  <p>A Gym Management API was implemented, tested, and containerized. The 7 automated tests passed locally and in GitHub Actions. The local container reached healthy status. Both local and hosted Trivy scans passed for operating-system packages and declared application dependencies. Ansible deployed the service on the GitHub runner, where the health check also passed. Jenkins, Docker Hub publication, persistent database storage, and production hosting remain outside this practical.</p>
   <div class="footer">Assignment 1 · Conclusion and evidence</div>
 </section>
 </body>
