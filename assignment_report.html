@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Assignment 1 - DevOps Pipeline for a Gym Management System</title>
+<style>
+@page { size: A4; margin: 17mm 18mm 18mm; }
+* { box-sizing: border-box; }
+body { color: #1e293b; font: 10pt/1.48 "Aptos", "Calibri", Arial, sans-serif; }
+h1, h2, h3 { color: #12304a; }
+h1 { font-size: 27pt; line-height: 1.18; margin: 12mm 0 5mm; }
+h2 { border-bottom: 2px solid #159a91; font-size: 17pt; margin: 0 0 6mm; padding-bottom: 2mm; }
+h3 { font-size: 12pt; margin: 4mm 0 1mm; }
+p { margin: 2mm 0 3mm; }
+ul, ol { margin: 1mm 0 3mm; padding-left: 7mm; }
+li { margin: 1mm 0; }
+code, pre { font-family: Consolas, "Courier New", monospace; }
+code { background: #eef3f7; padding: 0.2mm 0.8mm; }
+pre { background: #112236; color: #f1f5f9; font-size: 8pt; line-height: 1.38; padding: 3mm; white-space: pre-wrap; }
+table { border-collapse: collapse; font-size: 8.5pt; margin: 3mm 0; width: 100%; }
+th { background: #12304a; color: #fff; text-align: left; }
+th, td { border: 1px solid #d5dee7; padding: 2mm; vertical-align: top; }
+.cover { align-items: center; display: flex; flex-direction: column; justify-content: center; min-height: 245mm; text-align: center; }
+.cover .eyebrow { color: #159a91; font-size: 12pt; font-weight: bold; letter-spacing: 2px; }
+.cover h1 { font-size: 29pt; }
+.cover .topic { color: #159a91; font-size: 15pt; font-weight: bold; margin: 7mm 0; }
+.cover .rule { background: #159a91; height: 2px; margin: 5mm auto 12mm; width: 45mm; }
+.cover table { margin-top: 12mm; text-align: left; width: 82%; }
+.cover td { height: 12mm; }
+.tag { background: #e8f6f4; border-left: 3px solid #159a91; margin: 4mm 0; padding: 3mm; }
+.small { color: #526578; font-size: 8.5pt; }
+.page { page-break-after: always; }
+.page:last-child { page-break-after: auto; }
+.flow { background: #e8f6f4; border: 1px solid #b7dfda; color: #12304a; font-size: 11pt; font-weight: bold; margin: 4mm 0; padding: 4mm; text-align: center; }
+.evidence { border: 1.5px dashed #7890a5; color: #536b80; margin: 4mm 0; min-height: 52mm; padding: 5mm; text-align: center; }
+.evidence b { color: #12304a; display: block; margin-bottom: 2mm; }
+.footer { border-top: 1px solid #d5dee7; color: #64748b; font-size: 8pt; margin-top: 6mm; padding-top: 2mm; }
+</style>
+</head>
+<body>
+<section class="page cover">
+  <div class="eyebrow">DEVOPS PRACTICAL ASSIGNMENT</div>
+  <h1>Assignment - 1</h1>
+  <div class="rule"></div>
+  <p><b>Aim</b></p>
+  <p>To design and demonstrate a basic DevOps pipeline for a Gym Management System using automated tests, containerization, vulnerability scanning, and deployment automation.</p>
+  <div class="topic">Topic: DevOps Pipeline for a Gym Management System</div>
+  <table>
+    <tr><td><b>Student Name</b></td><td></td></tr>
+    <tr><td><b>Roll Number</b></td><td></td></tr>
+    <tr><td><b>Class / Division</b></td><td></td></tr>
+    <tr><td><b>Subject</b></td><td>DevOps</td></tr>
+    <tr><td><b>Academic Year</b></td><td></td></tr>
+  </table>
+  <p class="small">Practical implementation and results are based on the local project and tool runs described in this report.</p>
+</section>
+
+<div style="page-break-before:always;break-before:page"></div>
+<section class="page">
+  <h2>1. Introduction and Pipeline</h2>
+  <p>A gym management application can help staff maintain membership records and check that the API is available. A DevOps pipeline automates repeatable quality and delivery steps so changes are tested, packaged, scanned, and deployed consistently.</p>
+  <h3>Project scope</h3>
+  <p>This practical implements a small Flask REST API for member registration and lookup. It is a demonstration service, not a production membership platform: its sample member data is held in memory and is lost when the container restarts.</p>
+  <div class="flow">Jira → GitHub → Jenkins / GitHub Actions → pytest → Docker → Trivy → Ansible / Docker Compose</div>
+  <h3>Pipeline stages</h3>
+  <ol>
+    <li><b>Plan:</b> break the work into trackable tasks in Jira.</li>
+    <li><b>Version:</b> keep the application, tests, container recipe, and pipeline definitions in GitHub.</li>
+    <li><b>Build and test:</b> install declared dependencies and run automated pytest checks.</li>
+    <li><b>Package:</b> build the application as a Docker image.</li>
+    <li><b>Scan:</b> check operating-system packages and declared Python dependencies for high/critical vulnerabilities.</li>
+    <li><b>Deploy and verify:</b> use Ansible to run Docker Compose and check the service health endpoint.</li>
+  </ol>
+  <h3>Benefits</h3>
+  <ul>
+    <li>Repeatable builds and automated regression checks.</li>
+    <li>Earlier visibility of dependency and image security issues.</li>
+    <li>Consistent deployment instructions across developer and CI environments.</li>
+  </ul>
+  <div class="footer">Assignment 1 · DevOps Pipeline for a Gym Management System</div>
+</section>
+
+<div style="page-break-before:always;break-before:page"></div>
+<section class="page">
+  <h2>2. Theory: Planning, Source Control and CI</h2>
+  <h3>1. Jira</h3>
+  <p>Jira is a project and issue-tracking tool used to plan work, assign tasks, and monitor progress. For this project, suitable tasks include API implementation, testing, containerization, security scanning, and deployment automation. A real Jira board requires a signed-in account and project workspace.</p>
+  <h3>2. Git and GitHub</h3>
+  <p>Git records source changes as version history. GitHub hosts Git repositories and supports collaboration and pull requests. The project contains a GitHub Actions workflow definition; uploading it and obtaining a hosted Actions run requires a GitHub repository and account access.</p>
+  <h3>3. Jenkins</h3>
+  <p>Jenkins is an automation server that runs a pipeline defined in a <code>Jenkinsfile</code>. The supplied pipeline checks out source, installs dependencies, runs pytest, builds the image, scans it, and deploys with Docker Compose. A working Jenkins server and configured Linux agent are required to run it.</p>
+  <h3>4. pytest</h3>
+  <p>pytest is a Python test framework. Automated tests exercise the health endpoint, successful member creation, list operations, invalid input, duplicate email rejection, and unknown-member handling.</p>
+  <h3>5. GitHub Actions</h3>
+  <p>GitHub Actions runs workflow jobs from YAML files stored in <code>.github/workflows</code>. The included workflow is set to run for pushes and pull requests to <code>main</code>, then test, build, scan, deploy on its runner, and verify service health. A hosted run has not been claimed unless the workflow is uploaded and executed in GitHub.</p>
+  <div class="footer">Assignment 1 · Theory</div>
+</section>
+
+<div style="page-break-before:always;break-before:page"></div>
+<section class="page">
+  <h2>3. Theory: Containers, Security and Deployment</h2>
+  <h3>6. Docker</h3>
+  <p>Docker packages an application and its runtime dependencies as an image. A container runs that image in an isolated process environment. The Dockerfile uses a slim Python base image, installs the application dependencies, runs as a non-root user, and defines a health check.</p>
+  <h3>7. Docker Compose</h3>
+  <p>Docker Compose declares a service, image build, port mapping, restart policy, and health check in YAML. One command can build and run the gym API at <code>http://localhost:8088</code>.</p>
+  <h3>8. Docker Hub</h3>
+  <p>Docker Hub is a hosted container-image registry. After an interactive login, a tagged image can be pushed for sharing or deployment. No registry login, publication, or credentials are included in this local demonstration.</p>
+  <h3>9. Trivy</h3>
+  <p>Trivy scans container images, source dependencies, and other artifacts for known vulnerabilities. This project scans the image's operating-system packages separately from the Python packages declared in <code>requirements.txt</code>. This avoids treating unrelated upstream SBOM entries as installed application dependencies.</p>
+  <h3>10. Ansible</h3>
+  <p>Ansible automates configuration and deployment using playbooks. The supplied playbook calls Docker Compose on the local host. The playbook is configured, but Ansible was not executed on this Windows machine; its control node should run on Linux, WSL, or another supported environment.</p>
+  <div class="tag"><b>Security note:</b> never place registry passwords, access tokens, or other secrets in source code or screenshots. Use the CI platform's secret store for real deployments.</div>
+  <div class="footer">Assignment 1 · Theory</div>
+</section>
+
+<div style="page-break-before:always;break-before:page"></div>
+<section class="page">
+  <h2>4. Practical Implementation</h2>
+  <h3>Step 1: Create the project</h3>
+  <p>A separate project directory named <code>gym-management-devops</code> was created so the existing movie-recommendation application remained untouched.</p>
+  <h3>Step 2: Develop the Gym Management API</h3>
+  <p>The Flask API provides the following endpoints:</p>
+  <table>
+    <tr><th>Method and path</th><th>Function</th></tr>
+    <tr><td><code>GET /health</code></td><td>Returns service health.</td></tr>
+    <tr><td><code>GET /api/members</code></td><td>Returns the current in-memory member list.</td></tr>
+    <tr><td><code>POST /api/members</code></td><td>Validates and adds a member with name and email.</td></tr>
+    <tr><td><code>GET /api/members/&lt;id&gt;</code></td><td>Returns the requested member or a 404 response.</td></tr>
+  </table>
+  <h3>Step 3: Install and test</h3>
+  <pre>cd C:\Users\Kamal\Downloads\movie-rec-main\gym-management-devops
+.\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
+.\.venv\Scripts\python.exe -m pytest -q</pre>
+  <p><b>Observed result:</b> 7 tests passed on Python 3.13.</p>
+  <h3>Step 4: Containerize and run</h3>
+  <pre>docker compose up --build -d
+docker compose ps
+curl.exe http://localhost:8088/health</pre>
+  <p><b>Observed result:</b> the container reported healthy and the API returned <code>{"service":"gym-management-api","status":"healthy"}</code>.</p>
+  <div class="footer">Assignment 1 · Practical steps and outputs</div>
+</section>
+
+<div style="page-break-before:always;break-before:page"></div>
+<section class="page">
+  <h2>5. Practical Security Scan and Automation</h2>
+  <h3>Step 5: Test a membership request</h3>
+  <pre>Invoke-RestMethod -Method Post `
+  -Uri 'http://localhost:8088/api/members' `
+  -ContentType 'application/json' `
+  -Body (@{name='Asha Patel';email='asha@example.com'} | ConvertTo-Json)</pre>
+  <p><b>Observed result:</b> the service accepted the example member and returned an active membership with a generated ID.</p>
+  <h3>Step 6: Scan the operating-system packages</h3>
+  <pre>docker run --rm -v /var/run/docker.sock:/var/run/docker.sock `
+  aquasec/trivy:0.75.0 image --pkg-types os --exit-code 1 `
+  --severity CRITICAL,HIGH --ignore-unfixed gym-management-api:local</pre>
+  <p><b>Observed result:</b> no operating-system vulnerabilities were detected in the built image at scan time.</p>
+  <h3>Step 7: Scan declared Python dependencies</h3>
+  <pre>$projectPath = (Get-Location).Path
+docker run --rm -v "${projectPath}:/src" aquasec/trivy:0.75.0 fs `
+  --scanners vuln --pkg-types library --exit-code 1 `
+  --severity CRITICAL,HIGH --ignore-unfixed /src/requirements.txt</pre>
+  <p><b>Observed result:</b> no vulnerabilities were detected in the declared application dependency file at scan time.</p>
+  <h3>Step 8: CI and deployment configuration</h3>
+  <p>A Jenkinsfile and GitHub Actions workflow were added with test, build, security-scan, and deployment stages. A local Ansible playbook invokes Docker Compose. These configuration files are prepared; hosted Jenkins/GitHub runs, Jira board setup, Docker Hub publishing, and Ansible execution are not represented as completed because they require separate accounts or a supported host setup.</p>
+  <div class="footer">Assignment 1 · Practical steps and outputs</div>
+</section>
+
+<div style="page-break-before:always;break-before:page"></div>
+<section class="page">
+  <h2>6. Evidence and Conclusion</h2>
+  <p>The following genuine evidence screenshots can be inserted in the marked spaces. Capture your own screen; do not include tokens, passwords, or personal account details.</p>
+  <div class="evidence"><b>Evidence 1 — Passing tests</b>Insert a terminal screenshot showing the pytest command and “7 passed”.</div>
+  <div class="evidence"><b>Evidence 2 — Running Docker container and API health</b>Insert Docker Compose status and the browser or terminal response from <code>http://localhost:8088/health</code>.</div>
+  <div class="evidence"><b>Evidence 3 — Trivy operating-system scan</b>Insert the clean OS-package scan summary.</div>
+  <div class="evidence"><b>Evidence 4 — Trivy dependency scan</b>Insert the clean <code>requirements.txt</code> scan summary.</div>
+  <div class="evidence"><b>Evidence 5 — Optional account-based services</b>After you set them up, insert the Jira board and a successful GitHub Actions or Jenkins pipeline run. These external services have not been run for this practical.</div>
+  <h3>Conclusion</h3>
+  <p>A Gym Management API was implemented, tested, containerized, and run locally. The 7 automated tests passed, the Docker container reached healthy status, and the OS-package and declared-dependency scans reported no high or critical findings at scan time. CI and deployment definitions provide a repeatable next step for GitHub Actions or Jenkins. Persistent database storage, production hosting, and account-based integrations remain outside this local demonstration.</p>
+  <div class="footer">Assignment 1 · Conclusion and evidence</div>
+</section>
+</body>
+</html>

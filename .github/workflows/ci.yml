@@ -1,0 +1,54 @@
+name: Gym management CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Run tests
+        run: pytest -q
+
+      - name: Build container image
+        run: docker build -t gym-management-api:${{ github.sha }} .
+
+      - name: Scan image operating-system packages with Trivy
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: image
+          image-ref: gym-management-api:${{ github.sha }}
+          trivy-args: --pkg-types os --severity CRITICAL,HIGH --ignore-unfixed --exit-code 1
+
+      - name: Scan application dependencies with Trivy
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: fs
+          scan-ref: requirements.txt
+          trivy-args: --scanners vuln --pkg-types library --severity CRITICAL,HIGH --ignore-unfixed --exit-code 1
+
+      - name: Install Ansible
+        run: python -m pip install ansible-core
+
+      - name: Deploy with Ansible
+        run: ansible-playbook -i localhost, -c local deploy.yml
+
+      - name: Verify deployment
+        run: curl --fail --retry 5 --retry-connrefused --retry-delay 2 http://localhost:8088/health

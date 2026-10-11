@@ -1,0 +1,10 @@
+---
+- name: Deploy the gym management API
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Build and start the API with Docker Compose
+      ansible.builtin.command:
+        cmd: docker compose up -d --build
+        chdir: "{{ playbook_dir }}"
