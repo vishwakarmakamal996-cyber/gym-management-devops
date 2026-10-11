@@ -2,7 +2,7 @@
 
 This practical builds a small Flask membership API and demonstrates the flow:
 
-**Jira → GitHub → Jenkins/GitHub Actions → pytest → Docker → Trivy → Ansible/Docker Compose**
+**Jira → GitHub → GitHub Actions/Jenkins → pytest → Docker → Trivy → Ansible/Docker Compose**
 
 ## API
 
@@ -78,22 +78,23 @@ docker tag gym-management-api:local YOUR_DOCKERHUB_USERNAME/gym-management-api:1
 docker push YOUR_DOCKERHUB_USERNAME/gym-management-api:1.0
 ```
 
-For a GitHub Actions demonstration, push this directory as a GitHub repository
-and capture the completed Actions run. The workflow tests, builds, scans, then
-deploys to the temporary GitHub runner with Ansible. For Jenkins, create a
-Pipeline job pointing at the repository and configure Python 3, Docker Compose,
-and Trivy on its Linux agent. Store any registry or cloud credentials in the
-CI secret store; never commit them.
+The GitHub Actions workflow is configured to run tests, build and scan the
+image, deploy to its temporary runner using Ansible, and verify the health
+endpoint. Push this project to GitHub and capture an Actions run to document
+the hosted result. For Jenkins, create a Pipeline job pointing at this
+repository and configure Python 3, Docker Compose, and Trivy on its Linux
+agent. Store any registry or cloud credentials in the CI secret store; never
+commit them.
 
 ## Jira evidence
 
-Create a Jira project named **Gym Management DevOps** and track work such as:
-API implementation, automated tests, containerization, CI/security scanning,
-and deployment automation. Capture the project board with the tasks visible.
+The **Gym Management DevOps** Jira project tracks API implementation,
+automated tests, containerization, security scanning, and deployment
+automation.
 
 ## Suggested evidence screenshots
 
-Capture the Jira board; GitHub repository and workflow run; passing local test
-output; Docker image/build and running container; the Trivy scan result; and
+Capture the Jira task list; GitHub repository and workflow run; passing local
+test output; Docker image/build and running container; Trivy scan results; and
 Ansible deployment plus the `/health` response. Use your own signed-in accounts
 for screenshots and redact personal tokens or credentials.
